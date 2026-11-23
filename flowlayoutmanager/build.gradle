@@ -48,7 +48,16 @@ dependencies {
     androidTestImplementation "androidx.test:rules:1.4.0"
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+// Standard publishing for JitPack. Replaces a remote script (blundell/release-android-library@master)
+// that changed upstream and no longer works with this Gradle version.
+apply plugin: 'maven-publish'
 
-apply from: "https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle"
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
+}
